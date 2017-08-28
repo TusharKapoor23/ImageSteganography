@@ -1,5 +1,12 @@
 package imagesteganography;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
+
 /*
  * @author Tushar Kapoor
  *
@@ -417,15 +424,13 @@ public class AES {
         for (int j = 0; j < 16; j++) {
             tmp[j] = expandedKey[160 + j];
         }
-        
         addRoundKey(state, tmp);
-
         for (int i = numberOfRounds; i > 0; i--) {
             invShiftRows(state);
             invSubBytes(state);
             char[] tmp2 = new char[16];
             for (int j = 0; j < 16; j++) {
-                tmp2[j] = expandedKey[(160 - (16 * (i + 1))) + j];
+                tmp2[j] = expandedKey[(16*i) + j];
             }
             addRoundKey(state, tmp2);
             invMixColumns(state);
@@ -452,10 +457,10 @@ public class AES {
         System.out.println("--------------------------");
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         AES a = new AES();
-
-        char[] message = "This is a test".toCharArray();
+        String str = new String(Files.readAllBytes(Paths.get("Input.txt")));
+        char[] message = str.toCharArray();
         char[] key = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
         int originalLen = message.length;
@@ -466,7 +471,7 @@ public class AES {
         }
 
         char[] paddedMessage = new char[lenOfPaddedMessage];
-        char[] encryptedMessage = new char[lenOfPaddedMessage];
+        char[] encryptedMessage = new char[lenOfPaddedMessage];        
         for (int i = 0; i < lenOfPaddedMessage; i++) {
             if (i >= originalLen) {
                 paddedMessage[i] = 0;
@@ -474,21 +479,19 @@ public class AES {
                 paddedMessage[i] = message[i];
             }
         }
-
+        System.out.println("ENCRYPTION:");
         for (int i = 0; i < lenOfPaddedMessage; i += 16) {
             char[] tmp = new char[16];
             for (int j = 0; j < 16; j++) {
                 tmp[j] = paddedMessage[i + j];
             }
-            System.out.println("ENCRYPTION");
             a.AES_Encrypt(tmp, key);
             for (int j = 0; j < 16; j++) {
-                System.out.print(String.format("0x%02X", (int) tmp[j]));
-                System.out.print(" ");
                 encryptedMessage[i + j] = tmp[j];
+                System.out.print(String.format("%02x", (int) tmp[j]));;
             }
-            System.out.println("");
         }
+        //System.out.println(encryptedMessage);
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < encryptedMessage.length; i++) {
             String b = Integer.toBinaryString(encryptedMessage[i]);
@@ -500,11 +503,12 @@ public class AES {
             }
             s.append(b);
         }
-        System.out.println(s);
-        System.out.println("");
+        //System.out.println(s);
+        //System.out.println("");
         
         
         System.out.println("DECRYPTION");
+        StringBuilder finalStr = new StringBuilder();
         for (int i = 0; i < lenOfPaddedMessage; i += 16) {
             char[] tmp = new char[16];
             for (int j = 0; j < 16; j++) {
@@ -512,25 +516,20 @@ public class AES {
             }
             a.AES_Decrypt(tmp, key);
             for (int j = 0; j < 16; j++) {
-                //System.out.print(String.format("0x%02X", (int) tmp[j]));
-                System.out.print(tmp[j]);
-                //System.out.print(" ");
                 encryptedMessage[i + j] = tmp[j];
             }
-            System.out.println("");
         }
-        StringBuilder s2 = new StringBuilder();
         for (int i = 0; i < encryptedMessage.length; i++) {
-            String b = Integer.toBinaryString(encryptedMessage[i]);
-
-            if (b.length() < 8) {
-                b = "000000000".substring(0, 8 - b.length()).concat(b);
-            } else {
-                b = b.substring(b.length() - 8);
-            }
-            s2.append(b);
+            if(encryptedMessage[i] != '\0')
+                finalStr.append(encryptedMessage[i]);
         }
-        System.out.println(s2);
-        System.out.println("");
+        if(str.equals(finalStr.toString())){
+            System.out.println("Decryption Successful");
+            PrintWriter out = new PrintWriter("Output.txt");
+            out.println(finalStr);
+            out.close();
+        }
+        else
+            System.out.println("Decryption Failed");
     }
 }
