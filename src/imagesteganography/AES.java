@@ -216,150 +216,165 @@ public class AES {
         }
     }
 
-    public void subBytes(char state[]) {
-        for (int i = 0; i < 16; i++) {
-            state[i] = s_box[state[i]];
+    public void subBytes(char state[][]) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = s_box[state[i][j]];
+            }
         }
     }
     
-    public void invSubBytes(char state[]) {
-        for (int i = 0; i < 16; i++) {
-            state[i] = inv_s_box[state[i]];
+    public void invSubBytes(char state[][]) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = inv_s_box[state[i][j]];
+            }
         }
     }
 
-    public void shiftRows(char state[]) {
-        char[] tmp = new char[16];
+    public void shiftRows(char state[][]) {
+        char[][] tmp = new char[4][4];
 
-        tmp[0] = state[0];
-        tmp[1] = state[5];
-        tmp[2] = state[10];
-        tmp[3] = state[15];
+        tmp[0][0] = state[0][0];
+        tmp[0][1] = state[0][1];
+        tmp[0][2] = state[0][2];
+        tmp[0][3] = state[0][3];
 
-        tmp[4] = state[4];
-        tmp[5] = state[9];
-        tmp[6] = state[14];
-        tmp[7] = state[3];
+        tmp[1][0] = state[1][1];
+        tmp[1][1] = state[1][2];
+        tmp[1][2] = state[1][3];
+        tmp[1][3] = state[1][0];
 
-        tmp[8] = state[8];
-        tmp[9] = state[13];
-        tmp[10] = state[2];
-        tmp[11] = state[7];
+        tmp[2][0] = state[2][2];
+        tmp[2][1] = state[2][3];
+        tmp[2][2] = state[2][0];
+        tmp[2][3] = state[2][1];
 
-        tmp[12] = state[12];
-        tmp[13] = state[1];
-        tmp[14] = state[6];
-        tmp[15] = state[11];
+        tmp[3][0] = state[3][3];
+        tmp[3][1] = state[3][0];
+        tmp[3][2] = state[3][1];
+        tmp[3][3] = state[3][2];
 
-        for (int i = 0; i < 16; i++) {
-            state[i] = tmp[i];
-        }
-    }
-    
-    public void invShiftRows(char state[]) {
-        char[] tmp = new char[16];
-
-        tmp[0] = state[0];
-        tmp[1] = state[13];
-        tmp[2] = state[10];
-        tmp[3] = state[7];
-
-        tmp[4] = state[4];
-        tmp[5] = state[1];
-        tmp[6] = state[14];
-        tmp[7] = state[11];
-
-        tmp[8] = state[8];
-        tmp[9] = state[5];
-        tmp[10] = state[2];
-        tmp[11] = state[15];
-
-        tmp[12] = state[12];
-        tmp[13] = state[9];
-        tmp[14] = state[6];
-        tmp[15] = state[3];
-
-        for (int i = 0; i < 16; i++) {
-            state[i] = tmp[i];
-        }
-    }
-
-    public void mixColumns(char state[]) {
-        char[] tmp = new char[16];
-
-        tmp[0] = (char) (mul2[state[0]] ^ mul3[state[1]] ^ state[2] ^ state[3]);
-        tmp[1] = (char) (state[0] ^ mul2[state[1]] ^ mul3[state[2]] ^ state[3]);
-        tmp[2] = (char) (state[0] ^ state[1] ^ mul2[state[2]] ^ mul3[state[3]]);
-        tmp[3] = (char) (mul3[state[0]] ^ state[1] ^ state[2] ^ mul2[state[3]]);
-
-        tmp[4] = (char) (mul2[state[4]] ^ mul3[state[5]] ^ state[6] ^ state[7]);
-        tmp[5] = (char) (state[4] ^ mul2[state[5]] ^ mul3[state[6]] ^ state[7]);
-        tmp[6] = (char) (state[4] ^ state[5] ^ mul2[state[6]] ^ mul3[state[7]]);
-        tmp[7] = (char) (mul3[state[4]] ^ state[5] ^ state[6] ^ mul2[state[7]]);
-
-        tmp[8] = (char) (mul2[state[8]] ^ mul3[state[9]] ^ state[10] ^ state[11]);
-        tmp[9] = (char) (state[8] ^ mul2[state[9]] ^ mul3[state[10]] ^ state[11]);
-        tmp[10] = (char) (state[8] ^ state[9] ^ mul2[state[10]] ^ mul3[state[11]]);
-        tmp[11] = (char) (mul3[state[8]] ^ state[9] ^ state[10] ^ mul2[state[11]]);
-
-        tmp[12] = (char) (mul2[state[12]] ^ mul3[state[13]] ^ state[14] ^ state[15]);
-        tmp[13] = (char) (state[12] ^ mul2[state[13]] ^ mul3[state[14]] ^ state[15]);
-        tmp[14] = (char) (state[12] ^ state[13] ^ mul2[state[14]] ^ mul3[state[15]]);
-        tmp[15] = (char) (mul3[state[12]] ^ state[13] ^ state[14] ^ mul2[state[15]]);
-
-        for (int i = 0; i < 16; i++) {
-            state[i] = tmp[i];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = tmp[i][j];
+            }
+            
         }
     }
     
-    public void invMixColumns(char state[]) {
-        char[] tmp = new char[16];
+    public void invShiftRows(char state[][]) {
+        char[][] tmp = new char[4][4];
 
-        tmp[0] = (char) (mul14[state[0]] ^ mul11[state[1]] ^ mul13[state[2]] ^ mul9[state[3]]);
-        tmp[1] = (char) (mul9[state[0]]  ^ mul14[state[1]] ^ mul11[state[2]] ^ mul13[state[3]]);
-        tmp[2] = (char) (mul13[state[0]] ^ mul9[state[1]]  ^ mul14[state[2]] ^ mul11[state[3]]);
-        tmp[3] = (char) (mul11[state[0]] ^ mul13[state[1]] ^ mul9[state[2]]  ^ mul14[state[3]]);
+        tmp[0][0] = state[0][0];
+        tmp[0][1] = state[0][1];
+        tmp[0][2] = state[0][2];
+        tmp[0][3] = state[0][3];
 
-        tmp[4] = (char) (mul14[state[4]] ^ mul11[state[5]] ^ mul13[state[6]] ^ mul9[state[7]]);
-        tmp[5] = (char) (mul9[state[4]]  ^ mul14[state[5]] ^ mul11[state[6]] ^ mul13[state[7]]);
-        tmp[6] = (char) (mul13[state[4]] ^ mul9[state[5]]  ^ mul14[state[6]] ^ mul11[state[7]]);
-        tmp[7] = (char) (mul11[state[4]] ^ mul13[state[5]] ^ mul9[state[6]]  ^ mul14[state[7]]);
+        tmp[1][0] = state[1][3];
+        tmp[1][1] = state[1][0];
+        tmp[1][2] = state[1][1];
+        tmp[1][3] = state[1][2];
 
-        tmp[8] = (char) (mul14[state[8]] ^ mul11[state[9]] ^ mul13[state[10]] ^ mul9[state[11]]);
-        tmp[9] = (char) (mul9[state[8]]  ^ mul14[state[9]] ^ mul11[state[10]] ^ mul13[state[11]]);
-        tmp[10] = (char) (mul13[state[8]] ^ mul9[state[9]]  ^ mul14[state[10]] ^ mul11[state[11]]);
-        tmp[11] = (char) (mul11[state[8]] ^ mul13[state[9]] ^ mul9[state[10]]  ^ mul14[state[11]]);
+        tmp[2][0] = state[2][2];
+        tmp[2][1] = state[2][3];
+        tmp[2][2] = state[2][0];
+        tmp[2][3] = state[2][1];
 
-        tmp[12] = (char) (mul14[state[12]] ^ mul11[state[13]] ^ mul13[state[14]] ^ mul9[state[15]]);
-        tmp[13] = (char) (mul9[state[12]]  ^ mul14[state[13]] ^ mul11[state[14]] ^ mul13[state[15]]);
-        tmp[14] = (char) (mul13[state[12]] ^ mul9[state[13]]  ^ mul14[state[14]] ^ mul11[state[15]]);
-        tmp[15] = (char) (mul11[state[12]] ^ mul13[state[13]] ^ mul9[state[14]]  ^ mul14[state[15]]);
+        tmp[3][0] = state[3][1];
+        tmp[3][1] = state[3][2];
+        tmp[3][2] = state[3][3];
+        tmp[3][3] = state[3][0];
 
-        for (int i = 0; i < 16; i++) {
-            state[i] = tmp[i];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = tmp[i][j];
+            }
+            
         }
     }
 
-    public void addRoundKey(char state[], char roundKey[]) {
-        for (int i = 0; i < 16; i++) {
-            state[i] ^= roundKey[i];
+    public void mixColumns(char state[][]) {
+        char[][] tmp = new char[4][4];
+
+        tmp[0][0] = (char) (mul2[state[0][0]] ^ mul3[state[1][0]] ^ state[2][0] ^ state[3][0]);
+        tmp[1][0] = (char) (state[0][0] ^ mul2[state[1][0]] ^ mul3[state[2][0]] ^ state[3][0]);
+        tmp[2][0] = (char) (state[0][0] ^ state[1][0] ^ mul2[state[2][0]] ^ mul3[state[3][0]]);
+        tmp[3][0] = (char) (mul3[state[0][0]] ^ state[1][0] ^ state[2][0] ^ mul2[state[3][0]]);
+
+        tmp[0][1] = (char) (mul2[state[0][1]] ^ mul3[state[1][1]] ^ state[2][1] ^ state[3][1]);
+        tmp[1][1] = (char) (state[0][1] ^ mul2[state[1][1]] ^ mul3[state[2][1]] ^ state[3][1]);
+        tmp[2][1] = (char) (state[0][1] ^ state[1][1] ^ mul2[state[2][1]] ^ mul3[state[3][1]]);
+        tmp[3][1] = (char) (mul3[state[0][1]] ^ state[1][1] ^ state[2][1] ^ mul2[state[3][1]]);
+        
+        tmp[0][2] = (char) (mul2[state[0][2]] ^ mul3[state[1][2]] ^ state[2][2] ^ state[3][2]);
+        tmp[1][2] = (char) (state[0][2] ^ mul2[state[1][2]] ^ mul3[state[2][2]] ^ state[3][2]);
+        tmp[2][2] = (char) (state[0][2] ^ state[1][2] ^ mul2[state[2][2]] ^ mul3[state[3][2]]);
+        tmp[3][2] = (char) (mul3[state[0][2]] ^ state[1][2] ^ state[2][2] ^ mul2[state[3][2]]);
+        
+        tmp[0][3] = (char) (mul2[state[0][3]] ^ mul3[state[1][3]] ^ state[2][3] ^ state[3][3]);
+        tmp[1][3] = (char) (state[0][3] ^ mul2[state[1][3]] ^ mul3[state[2][3]] ^ state[3][3]);
+        tmp[2][3] = (char) (state[0][3] ^ state[1][3] ^ mul2[state[2][3]] ^ mul3[state[3][3]]);
+        tmp[3][3] = (char) (mul3[state[0][3]] ^ state[1][3] ^ state[2][3] ^ mul2[state[3][3]]);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = tmp[i][j];
+            }
+        }
+    }
+    
+    public void invMixColumns(char state[][]) {
+        char[][] tmp = new char[4][4];
+
+        tmp[0][0] = (char) (mul14[state[0][0]] ^ mul11[state[1][0]] ^ mul13[state[2][0]] ^ mul9[state[3][0]]);
+        tmp[1][0] = (char) (mul9[state[0][0]]  ^ mul14[state[1][0]] ^ mul11[state[2][0]] ^ mul13[state[3][0]]);
+        tmp[2][0] = (char) (mul13[state[0][0]] ^ mul9[state[1][0]]  ^ mul14[state[2][0]] ^ mul11[state[3][0]]);
+        tmp[3][0] = (char) (mul11[state[0][0]] ^ mul13[state[1][0]] ^ mul9[state[2][0]]  ^ mul14[state[3][0]]);
+
+        tmp[0][1] = (char) (mul14[state[0][1]] ^ mul11[state[1][1]] ^ mul13[state[2][1]] ^ mul9[state[3][1]]);
+        tmp[1][1] = (char) (mul9[state[0][1]]  ^ mul14[state[1][1]] ^ mul11[state[2][1]] ^ mul13[state[3][1]]);
+        tmp[2][1] = (char) (mul13[state[0][1]] ^ mul9[state[1][1]]  ^ mul14[state[2][1]] ^ mul11[state[3][1]]);
+        tmp[3][1] = (char) (mul11[state[0][1]] ^ mul13[state[1][1]] ^ mul9[state[2][1]]  ^ mul14[state[3][1]]);
+
+        tmp[0][2] = (char) (mul14[state[0][2]] ^ mul11[state[1][2]] ^ mul13[state[2][2]] ^ mul9[state[3][2]]);
+        tmp[1][2] = (char) (mul9[state[0][2]]  ^ mul14[state[1][2]] ^ mul11[state[2][2]] ^ mul13[state[3][2]]);
+        tmp[2][2] = (char) (mul13[state[0][2]] ^ mul9[state[1][2]]  ^ mul14[state[2][2]] ^ mul11[state[3][2]]);
+        tmp[3][2] = (char) (mul11[state[0][2]] ^ mul13[state[1][2]] ^ mul9[state[2][2]]  ^ mul14[state[3][2]]);
+
+        tmp[0][3] = (char) (mul14[state[0][3]] ^ mul11[state[1][3]] ^ mul13[state[2][3]] ^ mul9[state[3][3]]);
+        tmp[1][3] = (char) (mul9[state[0][3]]  ^ mul14[state[1][3]] ^ mul11[state[2][3]] ^ mul13[state[3][3]]);
+        tmp[2][3] = (char) (mul13[state[0][3]] ^ mul9[state[1][3]]  ^ mul14[state[2][3]] ^ mul11[state[3][3]]);
+        tmp[3][3] = (char) (mul11[state[0][3]] ^ mul13[state[1][3]] ^ mul9[state[2][3]]  ^ mul14[state[3][3]]);
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = tmp[i][j];
+            }
+        }
+    }
+
+    public void addRoundKey(char state[][], char roundKey[]) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] ^= roundKey[(4 * j) + i];
+            }
+            
         }
     }  
 
     public void AES_Encrypt(char message[], char key[]) {
 
-        char[] state = new char[16];
-        for (int i = 0; i < 16; i++) {
-            state[i] = message[i];
+        char[][] state = new char[4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = message[(4 * j) + i];
+            }
         }
         int numberOfRounds = 9;
-
         //Expand the keys
         char[] expandedKey = new char[176];
-        keyExpansion(key, expandedKey);
-
-        addRoundKey(state, key);
-
+        keyExpansion(key, expandedKey);      
+        addRoundKey(state, key);        
         for (int i = 0; i < numberOfRounds; i++) {
             subBytes(state);
             shiftRows(state);
@@ -376,19 +391,22 @@ public class AES {
         shiftRows(state);
         char[] tmp = new char[16];
         for (int j = 0; j < 16; j++) {
-            tmp[j] = expandedKey[160 + j];
+            tmp[j] = expandedKey[160 + j];            
         }
         addRoundKey(state, tmp);
-
-        for (int i = 0; i < 16; i++) {
-            message[i] = state[i];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                message[(4 * j)  + i] = state[i][j];
+            }
         }
     }
 
     public void AES_Decrypt(char encodedMessage[], char key[]) {
-        char[] state = new char[16];
-        for (int i = 0; i < 16; i++) {
-            state[i] = encodedMessage[i];
+        char[][] state = new char[4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                state[i][j] = encodedMessage[(4 * j) + i];
+            }
         }
         int numberOfRounds = 9;
         
@@ -399,6 +417,7 @@ public class AES {
         for (int j = 0; j < 16; j++) {
             tmp[j] = expandedKey[160 + j];
         }
+        
         addRoundKey(state, tmp);
 
         for (int i = numberOfRounds; i > 0; i--) {
@@ -406,7 +425,7 @@ public class AES {
             invSubBytes(state);
             char[] tmp2 = new char[16];
             for (int j = 0; j < 16; j++) {
-                tmp2[j] = expandedKey[160 - (16 * (i + 1)) + j];
+                tmp2[j] = expandedKey[(160 - (16 * (i + 1))) + j];
             }
             addRoundKey(state, tmp2);
             invMixColumns(state);
@@ -416,16 +435,28 @@ public class AES {
         invSubBytes(state);
         addRoundKey(state, key);
         
-        for (int i = 0; i < 16; i++) {
-            encodedMessage[i] = state[i];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                encodedMessage[(4 * j) + i] = state[i][j];
+            }
         }
     }
 
+    public static void printState(char[][] state){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(String.format("0x%02X", (int) state[i][j]) + "\t");
+            }
+            System.out.println("");
+        }
+        System.out.println("--------------------------");
+    }
+    
     public static void main(String[] args) {
         AES a = new AES();
 
-        char[] message = "Hello World!!".toCharArray();
-        char[] key = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+        char[] message = "This is a test".toCharArray();
+        char[] key = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
         int originalLen = message.length;
         int lenOfPaddedMessage = originalLen;
@@ -449,6 +480,7 @@ public class AES {
             for (int j = 0; j < 16; j++) {
                 tmp[j] = paddedMessage[i + j];
             }
+            System.out.println("ENCRYPTION");
             a.AES_Encrypt(tmp, key);
             for (int j = 0; j < 16; j++) {
                 System.out.print(String.format("0x%02X", (int) tmp[j]));
