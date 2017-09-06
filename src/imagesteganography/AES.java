@@ -459,9 +459,9 @@ public class AES {
     
     public static void main(String[] args) throws IOException {
         AES a = new AES();
-        String str = new String(Files.readAllBytes(Paths.get("Input.txt")));
+        String str = new String(Files.readAllBytes(Paths.get("input3.txt")));
         char[] message = str.toCharArray();
-        char[] key = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        char[] key = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
         int originalLen = message.length;
         int lenOfPaddedMessage = originalLen;
@@ -488,7 +488,7 @@ public class AES {
             a.AES_Encrypt(tmp, key);
             for (int j = 0; j < 16; j++) {
                 encryptedMessage[i + j] = tmp[j];
-                System.out.print(String.format("%02x", (int) tmp[j]));;
+                System.out.print(String.format("%02x", (int) tmp[j]));
             }
         }
         //System.out.println(encryptedMessage);
