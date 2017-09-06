@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
  */
 class test {
 
-    public static final String IMG = "paris.jpg";
+    public static final String IMG = "Input.jpg";
 
     public static int parseInt(String binary) {
         if (binary.length() < Integer.SIZE) {
@@ -37,7 +37,7 @@ class test {
         BufferedImage img = null;
         File f = null;
         try {
-            f = new File("paris (1).jpg");
+            f = new File("Input.jpg");
             img = ImageIO.read(f);
         } catch (IOException e) {
             System.out.println(e);
@@ -118,7 +118,7 @@ class test {
             }
         }
         try {
-            f = new File("D:\\Image\\Output.jpg");
+            f = new File("Output.jpg");
             ImageIO.write(img, "jpg", f);
         } catch (IOException e) {
             System.out.println(e);
