@@ -8,8 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
 
-/**
- *
+/*
  * @author Tushar Kapoor
  */
 class test {
@@ -109,7 +108,12 @@ class test {
                 StringBuilder x = new StringBuilder(pixels[i][j]);
                 x.deleteCharAt(x.length() - 1);
                 x.deleteCharAt(x.length() - 1);
+                x.deleteCharAt(x.length() - 1);
+                x.deleteCharAt(x.length() - 1);
+
                 if (counter < s.length()) {
+                    x.append(s.charAt(counter++));
+                    x.append(s.charAt(counter++));
                     x.append(s.charAt(counter++));
                     x.append(s.charAt(counter++));
                     int p = parseInt(x.toString());
