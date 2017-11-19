@@ -166,5 +166,25 @@ class test {
             System.out.print(newMessage[i]);
         }
         System.out.println("");
+        
+        
+        System.out.println("--------------------------------------");
+        try {
+            f = new File("Output.jpg");
+            img = ImageIO.read(f);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        width = img.getWidth();
+        height = img.getHeight();       
+        double[][] image = new double[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                image[i][j] = img.getRGB(j, i);
+                System.out.print(image[i][j] + "\t");
+            }
+            System.out.println("");
+        }
+       ImageSecretSharing.makeShares(image, height);
     }
 }
